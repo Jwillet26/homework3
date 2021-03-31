@@ -1,0 +1,27 @@
+{
+  "name": "homework3",
+  "version": "1.0.0",
+  "description": "homework3 for webserverprogramming",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "./node_modules/.bin/eslint **/*.js --fix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jwillet26/homework3.git"
+  },
+  "author": "John Willet",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jwillet26/homework3/issues"
+  },
+  "homepage": "https://github.com/Jwillet26/homework3#readme",
+  "devDependencies": {
+    "eslint": "^7.23.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
