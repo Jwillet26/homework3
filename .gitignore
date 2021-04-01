@@ -77,3 +77,6 @@ typings/
 
 # jetBrains Webstorm
 .idea/
+
+# json package
+package.json
