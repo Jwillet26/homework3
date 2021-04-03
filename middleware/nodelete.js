@@ -1,8 +1,8 @@
 const status = require('http-status-codes');
 
-module.exports = (request, response, next) => {
-  if (request.method === 'DELETE') {
-    response.sendStatus(status.METHOD_NOT_ALLOWED);
+module.exports = (req, res, next) => {
+  if (req.method === 'DELETE') {
+    res.sendStatus(status.METHOD_NOT_ALLOWED);
   } else {
     next();
   }
