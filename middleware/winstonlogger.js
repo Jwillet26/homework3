@@ -11,10 +11,10 @@ const winstonlogger = winston.createLogger({
 module.exports = (req, res, next) => {
   winstonlogger.log({
     level: 'info',
-    time: req.time,
+    serverTime: req.serverTime,
     method: req.method,
     body: req.body,
-    query: req.query.params,
+    query: req.query,
     headers: req.headers,
   });
   next();
