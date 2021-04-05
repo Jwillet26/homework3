@@ -1,15 +1,15 @@
-const winston = require('winston');
+const Winston = require('winston');
 
-const winstonlogger = winston.createLogger({
+const winstonLogger = Winston.createLogger({
   transports: [
-    new winston.transports.Console({
-      format: winston.format.simple(),
+    new Winston.transports.Console({
+      format: Winston.format.simple(),
     }),
   ],
 });
 
 module.exports = (req, res, next) => {
-  winstonlogger.log({
+  winstonLogger.log({
     level: 'info',
     serverTime: req.serverTime,
     url: req.originalUrl,

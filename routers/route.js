@@ -1,13 +1,13 @@
-const status = require('http-status-codes');
-const router = require('express').Router();
-const coinflip = require('coinflip');
+const { StatusCodes } = require('http-status-codes');
+const Router = require('express').Router();
+const CoinFlip = require('coinflip');
 
-router.all('/', (request, response) => {
-  if (coinflip()) {
-    response.status(status.OK).send('Hello World');
+Router.all('/', (request, response) => {
+  if (CoinFlip()) {
+    response.status(StatusCodes.OK).send('Hello World');
   } else {
     throw new Error('Oops');
   }
 });
 
-module.exports = router;
+module.exports = Router;

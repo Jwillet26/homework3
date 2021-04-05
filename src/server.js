@@ -1,17 +1,17 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const noDelete = require('../middleware/nodelete');
+const Express = require('express');
+const BodyParser = require('body-parser');
+const NoDelete = require('../middleware/nodelete');
 const Validator = require('../middleware/dateValidation');
-const logger = require('../middleware/winstonlogger');
-const router = require('../routers/route');
-const errorHandler = require('../middleware/error');
+const Logger = require('../middleware/winstonlogger');
+const Router = require('../routers/route');
+const ErrorHandler = require('../middleware/error');
 
-const app = express();
+const app = Express();
 
-app.use(bodyParser.json());
-app.use(noDelete);
+app.use(BodyParser.json());
+app.use(NoDelete);
 app.use(Validator);
-app.use(logger);
-app.use(router);
-app.use(errorHandler);
+app.use(Logger);
+app.use(Router);
+app.use(ErrorHandler);
 app.listen(8080);
