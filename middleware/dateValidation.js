@@ -39,16 +39,21 @@ module.exports = (req, res, next) => {
     const tempHeader = Number.parseInt(validationHeader, 10);
     const tempQuery = Number.parseInt(validationQuery, 10);
     if (tempHeader === tempQuery) {
-      if ((tempHeader >= (serverTime - 300)) && (tempHeader <= (serverTime + 300))) {
-        if ((tempQuery >= (serverTime - 300)) && (tempQuery <= (serverTime + 300))) {
-          req.dateValidation = tempHeader;
-          req.serverTime = serverTime;
-          next();
+      if (((tempHeader >= (serverTime - 300)) && (tempHeader <= (serverTime + 300)))
+          && ((tempQuery >= (serverTime - 300)) && (tempQuery <= (serverTime + 300)))) {
+        if ((tempHeader >= (serverTime - 300)) && (tempHeader <= (serverTime + 300))) {
+          if ((tempQuery >= (serverTime - 300)) && (tempQuery <= (serverTime + 300))) {
+            req.dateValidation = tempHeader;
+            req.serverTime = serverTime;
+            next();
+          } else {
+            res.status(StatusCodes.UNAUTHORIZED).send('Query is out of spec');
+          }
         } else {
-          res.status(StatusCodes.UNAUTHORIZED).send('Query is out of spec');
+          res.status(StatusCodes.UNAUTHORIZED).send('Header epoch is out of spec');
         }
       } else {
-        res.status(StatusCodes.UNAUTHORIZED).send('Header epoch is out of spec');
+        res.status(StatusCodes.UNAUTHORIZED).send('Header epoch and Query epoch is out of spec');
       }
     } else {
       res.status(StatusCodes.UNAUTHORIZED).send('Header and Query do not match');
