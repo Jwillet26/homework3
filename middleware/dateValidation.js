@@ -1,4 +1,4 @@
-const { StatusCodes, ReasonPhrases } = require('http-status-codes');
+const { StatusCodes } = require('http-status-codes');
 
 const findHeader = (epochDate, dateValidation) => {
   let result = null;
@@ -13,27 +13,45 @@ const findHeader = (epochDate, dateValidation) => {
 module.exports = (req, res, next) => {
   const ValidationHeader = findHeader('date-validation', req.headers);
   const ValidationQuery = findHeader('date-validation', req.query);
-
+  const ServerTime = Math.round(Date.now() / 1000);
+  let Temp = 0;
   if (ValidationHeader === null && ValidationQuery === null) {
-    res.status(StatusCodes.UNAUTHORIZED).send('Both are invalid');
-  } else if (ValidationHeader === null || ValidationQuery === null) {
-    res.status(StatusCodes.UNAUTHORIZED).send('one is not invalid');
+    res.status(StatusCodes.UNAUTHORIZED).send('Both header and query are invalid');
+  } else if (ValidationHeader === null) {
+    Temp = Number.parseInt(ValidationQuery, 10);
+    if ((Temp >= (ServerTime - 300)) && (Temp <= (ServerTime + 300))) {
+      req.dateValidation = Temp;
+      req.serverTime = ServerTime;
+      next();
+    } else {
+      res.status(StatusCodes.UNAUTHORIZED).send('Header epoch is out of spec');
+    }
+  } else if (ValidationQuery === null) {
+    Temp = Number.parseInt(ValidationHeader, 10);
+    if ((Temp >= (ServerTime - 300)) && Temp <= ((ServerTime + 300))) {
+      req.dateValidation = Temp;
+      req.serverTime = ServerTime;
+      next();
+    } else {
+      res.status(StatusCodes.UNAUTHORIZED).send('Query is out of spec');
+    }
   } else {
     const TempHeader = Number.parseInt(ValidationHeader, 10);
     const TempQuery = Number.parseInt(ValidationQuery, 10);
-
-    const ServerTime = Math.round(Date.now() / 1000);
-    const EpochTime = TempHeader;
     if (TempHeader === TempQuery) {
-      if (EpochTime > (ServerTime - 300) && EpochTime < (ServerTime + 300)) {
-        req.dateValidation = EpochTime;
-        req.serverTime = ServerTime;
-        next();
+      if ((TempHeader >= (ServerTime - 300)) && (TempHeader <= (ServerTime + 300))) {
+        if ((TempQuery >= (ServerTime - 300)) && (TempQuery <= (ServerTime + 300))) {
+          req.dateValidation = TempHeader;
+          req.serverTime = ServerTime;
+          next();
+        } else {
+          res.status(StatusCodes.UNAUTHORIZED).send('Query is out of spec');
+        }
       } else {
-        res.status(StatusCodes.UNAUTHORIZED).send(ReasonPhrases.UNAUTHORIZED);
+        res.status(StatusCodes.UNAUTHORIZED).send('Header epoch is out of spec');
       }
     } else {
-      res.status(StatusCodes.UNAUTHORIZED).send(ReasonPhrases.UNAUTHORIZED);
+      res.status(StatusCodes.UNAUTHORIZED).send('Header and Query do not match');
     }
   }
 };
